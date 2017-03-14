@@ -33,3 +33,11 @@ end：结束存储过程的定义。注意用$$来结束对存储过程的定义
 执行一个sql语句，将执行后的结果集返回给它的调用程序;
 内嵌一个不返回结果集的sql语句，如insert,update,delete等。
 
+#协议库更新：
+#将KID大于400的，KNAME下的值与KTYPE的值对调一下。导入数据时不小心弄反了。
+#思路：添加一个字段value1，把kname填进去，再把ktype更新进kname,再把value1更新到ktype，然后再把value1删除。
+ALTER TABLE protocolslibrary1020 ADD value1 varchar(128); 
+UPDATE protocolslibrary1020 set value1=KNAME where KID>400;
+UPDATE protocolslibrary1020 set KNAME=KTYPE where KID>400;
+UPDATE protocolslibrary1020 set KTYPE=value1 where KID>400;
+ALTER TABLE protocolslibrary1020  DROP value1;
